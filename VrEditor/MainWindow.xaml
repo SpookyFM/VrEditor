@@ -1,0 +1,120 @@
+﻿<Window x:Class="VrEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:av="clr-namespace:Avalon.Windows.Controls;assembly=AvalonLibrary"
+        xmlns:local="clr-namespace:VrEditor"
+        Title="kha.vr Editor" Height="544.444" Width="706.481">
+
+    <Window.Resources>
+
+
+        <!--
+        A data-template that defines the visuals for a rectangle.
+        -->
+        <DataTemplate 
+            DataType="{x:Type local:HotspotVM}"
+            >
+            <Grid>
+                <Ellipse
+                    Width="{Binding Width}"
+                    Height="{Binding Height}"
+                    MouseDown="Ellipse_MouseDown"
+                    MouseMove="Ellipse_MouseMove"
+                    MouseUp="Ellipse_MouseUp"
+                    Fill="Red"
+                    Cursor="Hand"
+                    />
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Project">
+                <MenuItem Name="mLoad" Header="Load" Click="mLoad_Click"></MenuItem>
+                <MenuItem Name="mSave" Header="Save" Click="mSave_Click"></MenuItem>
+                <Separator/>
+                <MenuItem Name="mClose" Header="Close"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Width="200">
+            <GroupBox Header="Scene Properties">
+                <av:AutoGrid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0">Scene name:</Label>
+                    <TextBox Grid.Column="1" Text="{Binding CurrentScene.Name}"></TextBox>
+
+                    <Label Grid.Column="0">Background image:</Label>
+                    <TextBox Grid.Column="1" Text="{Binding CurrentScene.BackgroundImage}"></TextBox>
+                    
+                    <Label Grid.ColumnSpan="2">Image properties</Label>
+                    <Label Grid.ColumnSpan="2"></Label>
+                </av:AutoGrid>
+            </GroupBox>
+            <GroupBox Header="Hotspots">
+                <DockPanel Height="80">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                        <Button x:Name="bDeleteHotspot" Width="20" Margin="0, 0, 10, 0" Click="bDeleteHotspot_Click">-</Button>
+                        <Button x:Name="bCreateHotspot" Width="20" Click="bCreateHotspot_Click">+</Button>
+                    </StackPanel>
+                    <ListView DockPanel.Dock="Top"  ItemsSource="{Binding CurrentScene.Hotspots}" SelectedItem="{Binding CurrentHotspot}"></ListView>
+                </DockPanel>
+            </GroupBox>
+            <GroupBox Header="Active Hotspot">
+                <av:AutoGrid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0">Name</Label>
+                    <TextBox Grid.Column="1" Text="{Binding CurrentHotspot.Name}"></TextBox>
+
+                    <Label Grid.Column="0">Center</Label>
+                    <Grid Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding CurrentHotspot.Shape.Center.X}"></TextBox>
+                        <TextBox Grid.Column="1" Text="{Binding CurrentHotspot.Shape.Center.Y}"></TextBox>
+                    </Grid>
+                    <Label Grid.Column="0">Radius</Label>
+                    <TextBox Grid.Column="1" Text="{Binding CurrentHotspot.Shape.Radius}"></TextBox>
+                    <Label Grid.ColumnSpan="2">OnExamine</Label>
+                    <TextBox Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnExamine}"></TextBox>
+                </av:AutoGrid>
+            </GroupBox>
+        </StackPanel>
+        <Viewbox VerticalAlignment="Top" DockPanel.Dock="Left">
+            <ItemsControl x:Name="itemsControl"
+                ItemsSource="{Binding HotspotVMs}"
+            >
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas x:Name="cCanvas" Width="4096" Height="2048">
+                            <Canvas.Background>
+                                <ImageBrush ImageSource="C:/khaviar/BlocksFromHeaven/Assets/Graphics/panorama.png"></ImageBrush>
+                            </Canvas.Background>
+                        </Canvas>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter
+                        Property="Canvas.Left"
+                        Value="{Binding X}"
+                        />
+                        <Setter
+                        Property="Canvas.Top"
+                        Value="{Binding Y}"
+                        />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+        </Viewbox>
+
+    </DockPanel>
+</Window>
