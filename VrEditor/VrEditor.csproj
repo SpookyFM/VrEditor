@@ -62,10 +62,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CircleShape.cs" />
+    <Compile Include="Exporter.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="Hotspot.cs" />
     <Compile Include="HotspotShape.cs" />
     <Compile Include="HotspotVM.cs" />
+    <Compile Include="ImageConverter.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="Vector2.cs" />
     <Page Include="MainWindow.xaml">

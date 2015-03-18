@@ -3,10 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:av="clr-namespace:Avalon.Windows.Controls;assembly=AvalonLibrary"
         xmlns:local="clr-namespace:VrEditor"
-        Title="kha.vr Editor" Height="544.444" Width="706.481">
+        Title="kha.vr Editor" Height="544.444" Width="706.481"
+        
+         >
 
     <Window.Resources>
-
+        <local:ImageConverter x:Key="myConverter"></local:ImageConverter>
 
         <!--
         A data-template that defines the visuals for a rectangle.
@@ -15,15 +17,44 @@
             DataType="{x:Type local:HotspotVM}"
             >
             <Grid>
-                <Ellipse
+                <Canvas>
+                    <Ellipse 
+                     Width="{Binding Width}"
+                     Height="{Binding Height}"
+                     Canvas.Left="-4096"
+                     Canvas.Top="0"
+                     Fill="Red" Opacity="0.3" />
+                    <Ellipse 
+                     Width="{Binding Width}"
+                     Height="{Binding Height}"
+                     Canvas.Left="4096"
+                     Canvas.Top="0"
+                     Fill="Red" Opacity="0.3" />
+                    <Ellipse 
+                     Width="{Binding Width}"
+                     Height="{Binding Height}"
+                     Canvas.Left="0"
+                     Canvas.Top="-2048"
+                     Fill="Red" Opacity="0.3" />
+                    <Ellipse 
+                     Width="{Binding Width}"
+                     Height="{Binding Height}"
+                     Canvas.Left="0"
+                     Canvas.Top="2048"
+                     Fill="Red" Opacity="0.3" />
+                </Canvas>
+                <Ellipse HorizontalAlignment="Left" Focusable="True"
                     Width="{Binding Width}"
                     Height="{Binding Height}"
                     MouseDown="Ellipse_MouseDown"
                     MouseMove="Ellipse_MouseMove"
                     MouseUp="Ellipse_MouseUp"
+                    PreviewKeyDown="itemsControl_KeyDown" KeyUp="itemsControl_KeyUp"
                     Fill="Red"
                     Cursor="Hand"
                     />
+                
+                          
             </Grid>
         </DataTemplate>
     </Window.Resources>
@@ -32,11 +63,46 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Project">
                 <MenuItem Name="mLoad" Header="Load" Click="mLoad_Click"></MenuItem>
-                <MenuItem Name="mSave" Header="Save" Click="mSave_Click"></MenuItem>
+                <MenuItem Name="mSave" Header="Save as" Click="mSave_Click"></MenuItem>
                 <Separator/>
-                <MenuItem Name="mClose" Header="Close"></MenuItem>
+                <MenuItem Name="mClose" Header="Close" Click="mClose_Click"></MenuItem>
             </MenuItem>
         </Menu>
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Left" Width="200">
+            <GroupBox Header="Game Properties">
+                <av:AutoGrid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0">Name:</Label>
+                    <TextBox Grid.Column="1" Text="{Binding CurrentGame.Name}"></TextBox>
+                    <Label Grid.ColumnSpan="2">Start scene</Label>
+                    <ComboBox Grid.ColumnSpan="2" ItemsSource="{Binding CurrentGame.Scenes}" SelectedItem="{Binding CurrentGame.StartScene}">
+                        <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </av:AutoGrid>
+            </GroupBox>
+            <GroupBox Header="Scenes">
+                <DockPanel Height="200">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                        <Button x:Name="bDeleteScene" Width="20" Margin="0, 0, 10, 0" Click="bDeleteScene_Click">-</Button>
+                        <Button x:Name="bCreateScene" Width="20" Click="bCreateScene_Click">+</Button>
+                    </StackPanel>
+                    <ListView DockPanel.Dock="Top" ItemsSource="{Binding CurrentGame.Scenes}" SelectedItem="{Binding CurrentScene}" SelectionChanged="ListView_SelectionChanged">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                   <TextBlock Text="{Binding Name}" />
+                                  </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </DockPanel>
+            </GroupBox>
+        </StackPanel>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Width="200">
             <GroupBox Header="Scene Properties">
                 <av:AutoGrid>
@@ -47,9 +113,12 @@
                     <Label Grid.Column="0">Scene name:</Label>
                     <TextBox Grid.Column="1" Text="{Binding CurrentScene.Name}"></TextBox>
 
-                    <Label Grid.Column="0">Background image:</Label>
-                    <TextBox Grid.Column="1" Text="{Binding CurrentScene.BackgroundImage}"></TextBox>
-                    
+                    <Label Grid.ColumnSpan="2">Background image:</Label>
+                    <DockPanel Grid.ColumnSpan="2" LastChildFill="True">
+                        <Button DockPanel.Dock="Right" Width="20" Name="bLoadBackground" Click="bLoadBackground_Click">...</Button>
+                        <TextBox DockPanel.Dock="Left" Text="{Binding CurrentScene.BackgroundImage}"></TextBox>
+                    </DockPanel>
+
                     <Label Grid.ColumnSpan="2">Image properties</Label>
                     <Label Grid.ColumnSpan="2"></Label>
                 </av:AutoGrid>
@@ -60,7 +129,15 @@
                         <Button x:Name="bDeleteHotspot" Width="20" Margin="0, 0, 10, 0" Click="bDeleteHotspot_Click">-</Button>
                         <Button x:Name="bCreateHotspot" Width="20" Click="bCreateHotspot_Click">+</Button>
                     </StackPanel>
-                    <ListView DockPanel.Dock="Top"  ItemsSource="{Binding CurrentScene.Hotspots}" SelectedItem="{Binding CurrentHotspot}"></ListView>
+                    <ListView DockPanel.Dock="Top"  ItemsSource="{Binding CurrentScene.Hotspots}" SelectedItem="{Binding CurrentHotspot}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                
+                                    <TextBlock Text="{Binding Name}" />
+                                
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </DockPanel>
             </GroupBox>
             <GroupBox Header="Active Hotspot">
@@ -89,14 +166,14 @@
             </GroupBox>
         </StackPanel>
         <Viewbox VerticalAlignment="Top" DockPanel.Dock="Left">
-            <ItemsControl x:Name="itemsControl"
+            <ItemsControl x:Name="itemsControl" ClipToBounds="True"
                 ItemsSource="{Binding HotspotVMs}"
             >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas x:Name="cCanvas" Width="4096" Height="2048">
                             <Canvas.Background>
-                                <ImageBrush ImageSource="C:/khaviar/BlocksFromHeaven/Assets/Graphics/panorama.png"></ImageBrush>
+                                <ImageBrush ImageSource="{Binding CurrentScene.BackgroundImage, Converter={StaticResource myConverter}}"></ImageBrush>
                             </Canvas.Background>
                         </Canvas>
                     </ItemsPanelTemplate>

@@ -1,4 +1,5 @@
-﻿using PropertyChanged;
+﻿using Microsoft.Win32;
+using PropertyChanged;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,6 +37,12 @@ namespace VrEditor
             set;
         }
 
+        public Game CurrentGame
+        {
+            get;
+            set;
+        }
+
         public Hotspot CurrentHotspot
         {
             get;
@@ -54,19 +61,14 @@ namespace VrEditor
 
             HotspotVMs = new ObservableCollection<HotspotVM>();
 
-            Scene testScene = new Scene("Test");
+            CurrentGame = new Game();
+            CurrentGame.Name = "New Game";
+            
+
+            Scene testScene = new Scene("New Scene");
             CurrentScene = testScene;
-
-            CurrentScene.Hotspots.CollectionChanged += Hotspots_CollectionChanged;
-
-            Hotspot testHotspot = new Hotspot("New hotspot");
-            CircleShape shape = new CircleShape();
-            shape.Center.X = 3148.0f;
-            shape.Center.Y = 1361.0f;
-            shape.Radius = 186.0f / 2.0f;
-            testHotspot.Shape = shape;
-
-            testScene.Hotspots.Add(testHotspot);
+            CurrentGame.StartScene = testScene;
+            CurrentGame.Scenes.Add(testScene);
 
 
             DataContext = this;
@@ -122,6 +124,7 @@ namespace VrEditor
 
         private void bCreateHotspot_Click(object sender, RoutedEventArgs e)
         {
+            if (CurrentScene == null) return;
             Hotspot hotspot = new Hotspot("New Hotspot");
             CircleShape shape = new CircleShape();
             shape.Radius = 100;
@@ -139,6 +142,7 @@ namespace VrEditor
         private void ParseScene()
         {
             HotspotVMs.Clear();
+            if (CurrentScene == null) return;
             foreach (Hotspot hotspot in CurrentScene.Hotspots)
             {
                 AddVM(hotspot);
@@ -147,20 +151,50 @@ namespace VrEditor
 
         private void mLoad_Click(object sender, RoutedEventArgs e)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Scene));
-            using (TextReader reader = new StreamReader(@"C:\khaviar\game.xml"))
+            if (CurrentScene == null) return;
+
+            String filename = String.Empty;
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Game project (*.xml)|*.xml";
+            bool? result = dialog.ShowDialog();
+            if (result.GetValueOrDefault())
             {
-                CurrentScene = serializer.Deserialize(reader) as Scene;
+                filename = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+            
+            XmlSerializer serializer = new XmlSerializer(typeof(Game));
+            using (TextReader reader = new StreamReader(filename))
+            {
+                CurrentGame = serializer.Deserialize(reader) as Game;
+                CurrentGame.StartScene = CurrentGame.GetScene(CurrentGame.StartScene.Name);
                 ParseScene();
             } 
         }
 
         private void mSave_Click(object sender, RoutedEventArgs e)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Scene));
-            using (TextWriter writer = new StreamWriter(@"C:\khaviar\game.xml"))
+            String filename = String.Empty;
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Game project (*.xml)|*.xml";
+            
+            bool? result = dialog.ShowDialog();
+            if (result.GetValueOrDefault())
             {
-                serializer.Serialize(writer, CurrentScene);
+                filename = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Game));
+            using (TextWriter writer = new StreamWriter(filename))
+            {
+                serializer.Serialize(writer, CurrentGame);
             } 
         }
 
@@ -170,9 +204,14 @@ namespace VrEditor
  
 
         private Point startDrag;
+        private float startDistance;
+        private float startRadius;
 
         private bool isDragging;
         private bool waitForDrag;
+        private bool isResizing;
+
+
 
 
         private void Ellipse_MouseDown(object sender, MouseButtonEventArgs e)
@@ -188,6 +227,7 @@ namespace VrEditor
             CurrentHotspot = hotspotVM.Hotspot;
 
             ellipse.CaptureMouse();
+            ellipse.Focus();
             startDrag = e.GetPosition(itemsControl);
 
             waitForDrag = true;
@@ -212,7 +252,21 @@ namespace VrEditor
                 hotspotVM.Y += (float) dragDelta.Y;
                 
             }
-            else if (waitForDrag)
+            else if (isResizing) {
+                var ellipse = (FrameworkElement)sender;
+                var hotspotVM = (HotspotVM)ellipse.DataContext;
+                
+                Point curMouseDownPoint = e.GetPosition(itemsControl);
+                Vector2 centerV = (hotspotVM.Hotspot.Shape as CircleShape).Center;
+
+                var resizeDelta = curMouseDownPoint - new Point(centerV.X, centerV.Y);
+
+                float resizeLength = (float) resizeDelta.Length;
+                float newDiameter = (resizeLength / startDistance) * startRadius;
+
+                hotspotVM.Width = newDiameter;
+                
+            } else if (waitForDrag)
             {
                 
                 Point curMouseDownPoint = e.GetPosition(itemsControl);
@@ -240,7 +294,85 @@ namespace VrEditor
             e.Handled = true;
 
             isDragging = false;
+            isResizing = false;
             waitForDrag = false;
+        }
+
+        private void itemsControl_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl)
+            {
+                if (isDragging)
+                {
+                    // We want to stop dragging and start resizing
+                    
+                    // Save the size and distance we started out with
+                    var ellipse = (FrameworkElement)sender;
+                    var hotspotVM = (HotspotVM)ellipse.DataContext;
+
+                    Point curMouseDownPoint = Mouse.GetPosition(itemsControl);
+                    Vector2 centerV = (hotspotVM.Hotspot.Shape as CircleShape).Center;
+
+                    var resizeDelta = curMouseDownPoint - new Point(centerV.X, centerV.Y);
+
+                    startDistance = (float)resizeDelta.Length;
+
+
+                    startRadius = (hotspotVM.Hotspot.Shape as CircleShape).Radius;
+                    
+                    isDragging = false;
+                    isResizing = true;
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void itemsControl_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftCtrl)
+            {
+                if (isResizing)
+                {
+                    // Go back to dragging?
+                    isDragging = true;
+                    isResizing = false;
+                    startDrag = Mouse.GetPosition(itemsControl);
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // Relaod the hotspots
+            ParseScene();
+        }
+
+        private void bDeleteScene_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentGame.Scenes.Remove(CurrentScene);
+        }
+
+        private void bCreateScene_Click(object sender, RoutedEventArgs e)
+        {
+            Scene scene = new Scene("New scene");
+            CurrentGame.Scenes.Add(scene);
+        }
+
+        private void bLoadBackground_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentScene == null) return;
+            OpenFileDialog dialog = new OpenFileDialog();
+            bool? result = dialog.ShowDialog();
+            if (result.GetValueOrDefault())
+            {
+                CurrentScene.BackgroundImage = dialog.FileName;
+            }
+        }
+
+        private void mClose_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
 
         

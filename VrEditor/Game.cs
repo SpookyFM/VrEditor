@@ -5,12 +5,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace VrEditor
 {
     [ImplementPropertyChanged]
-    class Game
+    public class Game
     {
+        [XmlAttribute]
         public String Name
         {
             get;
@@ -27,6 +29,27 @@ namespace VrEditor
         {
             get;
             set;
+        }
+
+        public Game()
+        {
+            Scenes = new ObservableCollection<Scene>();
+        }
+
+
+        public Scene GetScene(String name)
+        {
+            foreach (Scene scene in Scenes)
+            {
+                if (scene.Name == name) return scene;
+            }
+            return null;
+        }
+
+        public Game(String name)
+            : this()
+        {
+            Name = name;
         }
     }
 }
