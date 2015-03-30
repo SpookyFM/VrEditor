@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:av="clr-namespace:Avalon.Windows.Controls;assembly=AvalonLibrary"
         xmlns:local="clr-namespace:VrEditor"
-        Title="kha.vr Editor" Height="544.444" Width="706.481"
+        Title="kha.vr Editor" Height="617.578" Width="828.869"
         
          >
 
@@ -53,8 +53,8 @@
                     Fill="Red"
                     Cursor="Hand"
                     />
-                
-                          
+
+
             </Grid>
         </DataTemplate>
     </Window.Resources>
@@ -66,6 +66,9 @@
                 <MenuItem Name="mSave" Header="Save as" Click="mSave_Click"></MenuItem>
                 <Separator/>
                 <MenuItem Name="mClose" Header="Close" Click="mClose_Click"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Export">
+                <MenuItem Name="mExportProjectKha" Header="Project.kh" Click="mExportProjectKha_Click"></MenuItem>
             </MenuItem>
         </Menu>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Left" Width="200">
@@ -80,9 +83,9 @@
                     <Label Grid.ColumnSpan="2">Start scene</Label>
                     <ComboBox Grid.ColumnSpan="2" ItemsSource="{Binding CurrentGame.Scenes}" SelectedItem="{Binding CurrentGame.StartScene}">
                         <ComboBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}" />
-                                </DataTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
                 </av:AutoGrid>
@@ -96,13 +99,30 @@
                     <ListView DockPanel.Dock="Top" ItemsSource="{Binding CurrentGame.Scenes}" SelectedItem="{Binding CurrentScene}" SelectionChanged="ListView_SelectionChanged">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                   <TextBlock Text="{Binding Name}" />
-                                  </DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </DockPanel>
+            </GroupBox>
+            <GroupBox Header="Assets">
+                <DockPanel Height="200">
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                        <Button x:Name="bDeleteAsset" Width="20" Margin="0, 0, 10, 0" Click="bDeleteAsset_Click">-</Button>
+                        <Button x:Name="bCreateAsset" Width="20" Margin="0, 0, 10, 0" Click="bCreateAsset_Click">+</Button>
+                        <Button x:Name="bEditAsset" Click="bEditAsset_Click">Edit</Button>
+                    </StackPanel>
+                    <ListView DockPanel.Dock="Top" ItemsSource="{Binding CurrentGame.Assets}" SelectedItem="{Binding CurrentAsset}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                 </DockPanel>
             </GroupBox>
         </StackPanel>
+
         <StackPanel Orientation="Vertical" DockPanel.Dock="Right" Width="200">
             <GroupBox Header="Scene Properties">
                 <av:AutoGrid>
@@ -119,8 +139,9 @@
                         <TextBox DockPanel.Dock="Left" Text="{Binding CurrentScene.BackgroundImage}"></TextBox>
                     </DockPanel>
 
-                    <Label Grid.ColumnSpan="2">Image properties</Label>
-                    <Label Grid.ColumnSpan="2"></Label>
+                    <Label Grid.ColumnSpan="2">OnEnter</Label>
+                    <TextBox Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentScene.OnEnter}"></TextBox>
+
                 </av:AutoGrid>
             </GroupBox>
             <GroupBox Header="Hotspots">
@@ -132,9 +153,9 @@
                     <ListView DockPanel.Dock="Top"  ItemsSource="{Binding CurrentScene.Hotspots}" SelectedItem="{Binding CurrentHotspot}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                
-                                    <TextBlock Text="{Binding Name}" />
-                                
+
+                                <TextBlock Text="{Binding Name}" />
+
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>

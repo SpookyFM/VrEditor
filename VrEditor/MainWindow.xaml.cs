@@ -16,8 +16,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 using System.Xml.Serialization;
+
+using System.Web.Script.Serialization;
 
 namespace VrEditor
 {
@@ -44,6 +46,12 @@ namespace VrEditor
         }
 
         public Hotspot CurrentHotspot
+        {
+            get;
+            set;
+        }
+
+        public Asset CurrentAsset
         {
             get;
             set;
@@ -373,6 +381,48 @@ namespace VrEditor
         private void mClose_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void bCreateAsset_Click(object sender, RoutedEventArgs e)
+        {
+            Asset asset = new Asset();
+            asset.Name = "New Asset";
+            CurrentGame.Assets.Add(asset);
+        }
+
+        private void bDeleteAsset_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentGame.Assets.Remove(CurrentAsset);
+        }
+
+        private void bEditAsset_Click(object sender, RoutedEventArgs e)
+        {
+            AssetEditor editor = new AssetEditor();
+            editor.DataContext = CurrentAsset;
+            editor.ShowDialog();
+        }
+
+        private void mExportProjectKha_Click(object sender, RoutedEventArgs e)
+        {
+            String filename = String.Empty;
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Project.kha (*.kha)|*.kha";
+
+            bool? result = dialog.ShowDialog();
+            if (result.GetValueOrDefault())
+            {
+                filename = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            KhaExporter exporter = new KhaExporter();
+            String folder = Path.GetDirectoryName(filename);
+            exporter.BuildProject(CurrentGame.Assets, folder);
+            exporter.SaveTo(filename);
+            
         }
 
         

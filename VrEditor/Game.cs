@@ -31,9 +31,16 @@ namespace VrEditor
             set;
         }
 
+        public ObservableCollection<Asset> Assets
+        {
+            get;
+            set;
+        }
+
         public Game()
         {
             Scenes = new ObservableCollection<Scene>();
+            Assets = new ObservableCollection<Asset>();
         }
 
 

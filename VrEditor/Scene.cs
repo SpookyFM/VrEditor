@@ -28,6 +28,12 @@ namespace VrEditor
             set;
         }
 
+        public String OnEnter
+        {
+            get;
+            set;
+        }
+
         public ObservableCollection<Hotspot> Hotspots
         {
             get;

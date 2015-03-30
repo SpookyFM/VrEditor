@@ -1,0 +1,33 @@
+﻿<Window x:Class="VrEditor.AssetEditor"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:av="clr-namespace:Avalon.Windows.Controls;assembly=AvalonLibrary"
+        Title="AssetEditor" Height="300" Width="300">
+    <av:AutoGrid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Column="0">Asset name:</Label>
+        <TextBox Grid.Column="1" Text="{Binding Name}"></TextBox>
+
+        <Label Grid.ColumnSpan="2">File:</Label>
+        <DockPanel Grid.ColumnSpan="2" LastChildFill="True">
+            <Button DockPanel.Dock="Right" Width="20" Name="bChooseFile" Click="bChooseFile_Click">...</Button>
+            <TextBox DockPanel.Dock="Left" Text="{Binding File}"></TextBox>
+        </DockPanel>
+        <Label Grid.Column="0">Asset type:</Label>
+        <ComboBox Grid.Column="1" Text="{Binding Type}">
+            <ComboBox.Items>
+                <ComboBoxItem>blob</ComboBoxItem>
+                <ComboBoxItem>music</ComboBoxItem>
+                <ComboBoxItem>sound</ComboBoxItem>
+                <ComboBoxItem>image</ComboBoxItem>
+            </ComboBox.Items>
+        </ComboBox>
+        <Button x:Name="bClose" Grid.ColumnSpan="2" Click="bClose_Click">Close</Button>
+        
+        
+
+    </av:AutoGrid>
+</Window>
