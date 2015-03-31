@@ -158,6 +158,8 @@ namespace VrEditor
             }
         }
 
+        private String _currentProjectFile;
+
         private void mLoad_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentScene == null) return;
@@ -169,6 +171,7 @@ namespace VrEditor
             if (result.GetValueOrDefault())
             {
                 filename = dialog.FileName;
+                _currentProjectFile = filename;
             }
             else
             {
@@ -186,7 +189,7 @@ namespace VrEditor
 
         private void mSave_Click(object sender, RoutedEventArgs e)
         {
-            ExportGameXml(SerializationMode.SerializeEditor);
+            ExportGameXml(SerializationMode.SerializeEditor, false);
         }
 
       
@@ -414,26 +417,58 @@ namespace VrEditor
             ExportGameXml(SerializationMode.SerializeGame);
         }
 
-        private void ExportGameXml(SerializationMode mode)
+        private void ExportGameXml(SerializationMode mode, bool saveAs = true)
         {
             ImageFileHolder.SerializationMode = mode;
 
             String filename = String.Empty;
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "Game project (*.xml)|*.xml";
-
-            bool? result = dialog.ShowDialog();
-            if (result.GetValueOrDefault())
+            if (saveAs)
             {
-                filename = dialog.FileName;
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.Filter = "Game project (*.xml)|*.xml";
+
+                bool? result = dialog.ShowDialog();
+                if (result.GetValueOrDefault())
+                {
+                    filename = dialog.FileName;
+                }
+                else
+                {
+                    return;
+                }
             }
             else
             {
-                return;
+                filename = _currentProjectFile;
             }
 
             XmlSerializer serializer = new XmlSerializer(typeof(Game));
             using (TextWriter writer = new StreamWriter(filename))
+            {
+                serializer.Serialize(writer, CurrentGame);
+            } 
+        }
+
+        private void mSaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            ExportGameXml(SerializationMode.SerializeEditor);
+        }
+
+        private void mExportQuick_Click(object sender, RoutedEventArgs e)
+        {
+            String projectKha = "C:\\khaviar\\BlocksFromHeaven\\project.kha";
+            // Export project.kha
+            KhaExporter exporter = new KhaExporter();
+            String folder = Path.GetDirectoryName(projectKha);
+            exporter.BuildProject(CurrentGame.Assets, folder);
+            exporter.AddAssets(CurrentGame, folder);
+            exporter.SaveTo(projectKha);
+
+            // Export game.xml
+            String gameXml = "C:\\khaviar\\BlocksFromHeaven\\Assets\\game.xml";
+            ImageFileHolder.SerializationMode = SerializationMode.SerializeGame;
+            XmlSerializer serializer = new XmlSerializer(typeof(Game));
+            using (TextWriter writer = new StreamWriter(gameXml))
             {
                 serializer.Serialize(writer, CurrentGame);
             } 

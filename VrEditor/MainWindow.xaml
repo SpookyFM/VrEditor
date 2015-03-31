@@ -63,13 +63,15 @@
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Project">
                 <MenuItem Name="mLoad" Header="Load" Click="mLoad_Click"></MenuItem>
-                <MenuItem Name="mSave" Header="Save as" Click="mSave_Click"></MenuItem>
+                <MenuItem Name="mSaveAs" Header="Save as" Click="mSaveAs_Click"></MenuItem>
+                <MenuItem Name="mSave" Header="Save" Click="mSave_Click"></MenuItem>
                 <Separator/>
                 <MenuItem Name="mClose" Header="Close" Click="mClose_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="Export">
                 <MenuItem Name="mExportProjectKha" Header="Project.kha" Click="mExportProjectKha_Click"></MenuItem>
                 <MenuItem Name="mExportProjectXml" Header="Game.xml" Click="mExportGameXml_Click"></MenuItem>
+                <MenuItem Name="mExportQuick" Header="Quick" Click="mExportQuick_Click"></MenuItem>
             </MenuItem>
         </Menu>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Left" Width="200">
