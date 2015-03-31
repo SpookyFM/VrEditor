@@ -51,6 +51,12 @@ namespace VrEditor
             set;
         }
 
+        public String OnTalkTo
+        {
+            get;
+            set;
+        }
+
         
 
         public Hotspot(String name) {
