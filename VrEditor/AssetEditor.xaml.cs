@@ -11,7 +11,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+
 
 namespace VrEditor
 {
@@ -25,6 +25,48 @@ namespace VrEditor
             InitializeComponent();
         }
 
+
+        private void InitializeFromFilename(String filename)
+        {
+            List<String> imageExtensions = new List<string>();
+            imageExtensions.Add(".jpg");
+            imageExtensions.Add(".jpeg");
+            imageExtensions.Add(".png");
+
+            List<String> musicExtensions = new List<string>();
+            musicExtensions.Add(".mp3");
+
+            List<String> soundExtensions = new List<string>();
+            soundExtensions.Add(".wav");
+
+            String extension = System.IO.Path.GetExtension(filename);
+            String name = System.IO.Path.GetFileNameWithoutExtension(filename);
+
+            // Fill the name if it is still empty
+            if ((DataContext as Asset).Name == "New Asset")
+            {
+                (DataContext as Asset).Name = name;
+            }
+            
+            // Fill the type if we recognize it
+            if (imageExtensions.Contains(extension))
+            {
+                (DataContext as Asset).Type = "image";
+            }
+            else if (musicExtensions.Contains(extension))
+            {
+                (DataContext as Asset).Type = "music";
+            }
+            else if (soundExtensions.Contains(extension))
+            {
+                (DataContext as Asset).Type = "sound";
+            }
+            else
+            {
+                (DataContext as Asset).Type = "blob";
+            }
+        }
+
         private void bChooseFile_Click(object sender, RoutedEventArgs e)
         {
             String filename = String.Empty;
@@ -34,6 +76,7 @@ namespace VrEditor
             if (result.GetValueOrDefault())
             {
                 (DataContext as Asset).File = dialog.FileName;
+                InitializeFromFilename(dialog.FileName);
             }
         }
 

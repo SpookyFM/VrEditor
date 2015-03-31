@@ -16,7 +16,9 @@ namespace VrEditor
         {
             if (value != null)
             {
-                string filename = (string)value;
+                String filename = (String)((ImageFileHolder) value);
+
+                if (filename == null) return null;
 
                 return new BitmapImage(new Uri(filename));
             }

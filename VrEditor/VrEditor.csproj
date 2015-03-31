@@ -73,6 +73,7 @@
     <Compile Include="HotspotShape.cs" />
     <Compile Include="HotspotVM.cs" />
     <Compile Include="ImageConverter.cs" />
+    <Compile Include="ImageFileHolder.cs" />
     <Compile Include="json\Asset.cs" />
     <Compile Include="json\Game.cs" />
     <Compile Include="json\Project.cs" />

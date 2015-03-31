@@ -185,25 +185,7 @@ namespace VrEditor
 
         private void mSave_Click(object sender, RoutedEventArgs e)
         {
-            String filename = String.Empty;
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "Game project (*.xml)|*.xml";
-            
-            bool? result = dialog.ShowDialog();
-            if (result.GetValueOrDefault())
-            {
-                filename = dialog.FileName;
-            }
-            else
-            {
-                return;
-            }
-
-            XmlSerializer serializer = new XmlSerializer(typeof(Game));
-            using (TextWriter writer = new StreamWriter(filename))
-            {
-                serializer.Serialize(writer, CurrentGame);
-            } 
+            ExportGameXml(SerializationMode.SerializeEditor);
         }
 
       
@@ -421,8 +403,39 @@ namespace VrEditor
             KhaExporter exporter = new KhaExporter();
             String folder = Path.GetDirectoryName(filename);
             exporter.BuildProject(CurrentGame.Assets, folder);
+            exporter.AddAssets(CurrentGame, folder);
             exporter.SaveTo(filename);
             
+        }
+
+        private void mExportGameXml_Click(object sender, RoutedEventArgs e)
+        {
+            ExportGameXml(SerializationMode.SerializeGame);
+        }
+
+        private void ExportGameXml(SerializationMode mode)
+        {
+            ImageFileHolder.SerializationMode = mode;
+
+            String filename = String.Empty;
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "Game project (*.xml)|*.xml";
+
+            bool? result = dialog.ShowDialog();
+            if (result.GetValueOrDefault())
+            {
+                filename = dialog.FileName;
+            }
+            else
+            {
+                return;
+            }
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Game));
+            using (TextWriter writer = new StreamWriter(filename))
+            {
+                serializer.Serialize(writer, CurrentGame);
+            } 
         }
 
         

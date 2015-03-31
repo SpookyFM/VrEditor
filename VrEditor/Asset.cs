@@ -33,5 +33,13 @@ namespace VrEditor
             get;
             set;
         }
+
+        public Asset()
+        {
+            Name = String.Empty;
+            Type = String.Empty;
+            File = String.Empty;
+            Id = String.Empty;
+        }
     }
 }

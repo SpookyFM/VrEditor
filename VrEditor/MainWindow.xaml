@@ -68,7 +68,8 @@
                 <MenuItem Name="mClose" Header="Close" Click="mClose_Click"></MenuItem>
             </MenuItem>
             <MenuItem Header="Export">
-                <MenuItem Name="mExportProjectKha" Header="Project.kh" Click="mExportProjectKha_Click"></MenuItem>
+                <MenuItem Name="mExportProjectKha" Header="Project.kha" Click="mExportProjectKha_Click"></MenuItem>
+                <MenuItem Name="mExportProjectXml" Header="Game.xml" Click="mExportGameXml_Click"></MenuItem>
             </MenuItem>
         </Menu>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Left" Width="200">
@@ -140,7 +141,7 @@
                     </DockPanel>
 
                     <Label Grid.ColumnSpan="2">OnEnter</Label>
-                    <TextBox Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentScene.OnEnter}"></TextBox>
+                    <TextBox Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentScene.OnEnter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
                 </av:AutoGrid>
             </GroupBox>

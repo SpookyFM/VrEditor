@@ -22,7 +22,8 @@ namespace VrEditor
             set;
         }
 
-        public String BackgroundImage
+        //public String BackgroundImage
+        public ImageFileHolder BackgroundImage
         {
             get;
             set;

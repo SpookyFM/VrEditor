@@ -29,9 +29,16 @@ namespace VrEditor
 
             foreach (Asset a in assets) {
                 json.Asset asset = new json.Asset();
-                
-                // TODO: Relative to the project path!
-                asset.file = getRelativePath(folderName, a.File);
+
+                asset.file = Path.GetFileName(a.File);
+                if (a.Type == "music")
+                {
+                    asset.file = Path.GetFileNameWithoutExtension(a.File);           
+                }
+                if (a.Type == "sound")
+                {
+                    asset.file = Path.GetFileNameWithoutExtension(a.File);
+                }
                 asset.name = a.Name;
                 asset.type = a.Type;
                 asset.id = Guid.NewGuid().ToString();
@@ -58,5 +65,26 @@ namespace VrEditor
             System.IO.File.WriteAllText(filename, result);
         }
 
+        private json.Asset GenerateImageAsset(String filename, String folderName)
+        {
+            json.Asset asset;
+            asset = new json.Asset();
+            asset.id = Guid.NewGuid().ToString();
+            asset.name = Path.GetFileNameWithoutExtension(filename);
+            asset.type = "image";
+            asset.file = Path.GetFileName(filename);
+
+            return asset;
+        }
+
+        public void AddAssets(Game CurrentGame, String folderName)
+        {
+            foreach (Scene scene in CurrentGame.Scenes)
+            {
+                json.Asset asset = GenerateImageAsset((string) scene.BackgroundImage, folderName);
+                Project.assets.Add(asset);
+                Project.rooms[0].assets.Add(asset.id);
+            }
+        }
     }
 }
