@@ -134,6 +134,7 @@ namespace VrEditor
         {
             if (CurrentScene == null) return;
             Hotspot hotspot = new Hotspot("New Hotspot");
+            hotspot.IsEnabled = true;
             CircleShape shape = new CircleShape();
             shape.Radius = 100;
             shape.Center = new Vector2(50, 50);

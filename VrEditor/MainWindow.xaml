@@ -141,7 +141,7 @@
                     </DockPanel>
 
                     <Label Grid.ColumnSpan="2">OnEnter</Label>
-                    <TextBox Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentScene.OnEnter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentScene.OnEnter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
                 </av:AutoGrid>
             </GroupBox>
@@ -163,6 +163,7 @@
                 </DockPanel>
             </GroupBox>
             <GroupBox Header="Active Hotspot">
+                <ScrollViewer>
                 <av:AutoGrid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -182,9 +183,16 @@
                     </Grid>
                     <Label Grid.Column="0">Radius</Label>
                     <TextBox Grid.Column="1" Text="{Binding CurrentHotspot.Shape.Radius}"></TextBox>
+                    <Label Grid.Column="0">Enabled</Label>
+                        <CheckBox VerticalAlignment="Center" Grid.Column="1" IsChecked="{Binding CurrentHotspot.IsEnabled}"></CheckBox>
+                    <Label Grid.ColumnSpan="2">OnGaze</Label>
+                        <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnGaze,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                    <Label Grid.ColumnSpan="2">OnUse</Label>
+                        <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnUse,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     <Label Grid.ColumnSpan="2">OnExamine</Label>
-                    <TextBox Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnExamine}"></TextBox>
+                        <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnExamine,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
                 </av:AutoGrid>
+                </ScrollViewer>
             </GroupBox>
         </StackPanel>
         <Viewbox VerticalAlignment="Top" DockPanel.Dock="Left">

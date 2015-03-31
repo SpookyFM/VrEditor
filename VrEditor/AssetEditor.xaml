@@ -9,15 +9,15 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Label Grid.Column="0">Asset name:</Label>
-        <TextBox Grid.Column="1" Text="{Binding Name}"></TextBox>
+        <TextBox Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 
         <Label Grid.ColumnSpan="2">File:</Label>
         <DockPanel Grid.ColumnSpan="2" LastChildFill="True">
             <Button DockPanel.Dock="Right" Width="20" Name="bChooseFile" Click="bChooseFile_Click">...</Button>
-            <TextBox DockPanel.Dock="Left" Text="{Binding File}"></TextBox>
+            <TextBox DockPanel.Dock="Left" Text="{Binding File, UpdateSourceTrigger=PropertyChanged}"></TextBox>
         </DockPanel>
         <Label Grid.Column="0">Asset type:</Label>
-        <ComboBox Grid.Column="1" Text="{Binding Type}">
+        <ComboBox Grid.Column="1" Text="{Binding Type, UpdateSourceTrigger=PropertyChanged}">
             <ComboBox.Items>
                 <ComboBoxItem>blob</ComboBoxItem>
                 <ComboBoxItem>music</ComboBoxItem>

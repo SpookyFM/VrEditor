@@ -20,6 +20,13 @@ namespace VrEditor
             set;
         }
 
+        [XmlAttribute]
+        public Boolean IsEnabled
+        {
+            get;
+            set;
+        }
+
         public HotspotShape Shape
         {
             get;
@@ -32,11 +39,19 @@ namespace VrEditor
             set;
         }
 
+        public String OnGaze
+        {
+            get;
+            set;
+        }
+
         public String OnUse
         {
             get;
             set;
         }
+
+        
 
         public Hotspot(String name) {
             Name = name;
