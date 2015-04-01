@@ -47,9 +47,11 @@ namespace VrEditor
 
         public void ReadXml(System.Xml.XmlReader reader)
         {
-            value = reader.ReadString();
-            reader.ReadEndElement();
-            
+            if (!reader.IsEmptyElement)
+            {
+                value = reader.ReadString();
+                reader.ReadEndElement();
+            }
         }
 
 

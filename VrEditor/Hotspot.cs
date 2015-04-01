@@ -51,6 +51,12 @@ namespace VrEditor
             set;
         }
 
+        public String OnLook
+        {
+            get;
+            set;
+        }
+
         public String OnTalkTo
         {
             get;

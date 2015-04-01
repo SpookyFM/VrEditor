@@ -191,6 +191,8 @@
                         <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnGaze,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Label Grid.ColumnSpan="2">OnUse</Label>
                         <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnUse,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Grid.ColumnSpan="2">OnLook</Label>
+                        <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnLook,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Label Grid.ColumnSpan="2">OnExamine</Label>
                         <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnExamine,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Label Grid.ColumnSpan="2">OnTalkTo</Label>
