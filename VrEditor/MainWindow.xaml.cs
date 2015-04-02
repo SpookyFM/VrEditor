@@ -57,6 +57,12 @@ namespace VrEditor
             set;
         }
 
+        public InventoryItem CurrentItem
+        {
+            get;
+            set;
+        }
+
         public ObservableCollection<HotspotVM> HotspotVMs
         {
             get;
@@ -80,6 +86,21 @@ namespace VrEditor
 
 
             DataContext = this;
+
+            // For development: Load the default file
+
+            
+            String filename = "C:/khaviar/BlocksFromHeaven/Project/project.xml";
+            _currentProjectFile = filename;
+
+            XmlSerializer serializer = new XmlSerializer(typeof(Game));
+            using (TextReader reader = new StreamReader(filename))
+            {
+                CurrentGame = serializer.Deserialize(reader) as Game;
+                CurrentGame.StartScene = CurrentGame.GetScene(CurrentGame.StartScene.Name);
+                ParseScene();
+            } 
+
         }
 
         private void RemoveVM(Hotspot hotspot)
@@ -472,6 +493,25 @@ namespace VrEditor
             {
                 serializer.Serialize(writer, CurrentGame);
             } 
+        }
+
+        private void bDeleteItem_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentGame.InventoryItems.Remove(CurrentItem);
+        }
+
+        private void bCreateItem_Click(object sender, RoutedEventArgs e)
+        {
+            InventoryItem item = new InventoryItem();
+            item.Name = "New item";
+            CurrentGame.InventoryItems.Add(item);
+        }
+
+        private void bEditItem_Click(object sender, RoutedEventArgs e)
+        {
+            ItemEditor editor = new ItemEditor();
+            editor.DataContext = CurrentItem;
+            editor.ShowDialog();
         }
 
         

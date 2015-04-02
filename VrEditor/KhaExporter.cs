@@ -47,6 +47,8 @@ namespace VrEditor
             }
         }
 
+        
+
 
         private String getRelativePath(String basePath, String filename)
         {
@@ -85,6 +87,20 @@ namespace VrEditor
                 Project.assets.Add(asset);
                 Project.rooms[0].assets.Add(asset.id);
             }
+
+            foreach (InventoryItem item in CurrentGame.InventoryItems)
+            {
+                json.Asset image = GenerateImageAsset((string)item.Image, folderName);
+                Project.assets.Add(image);
+                Project.rooms[0].assets.Add(image.id);
+
+                json.Asset activeImage = GenerateImageAsset((string)item.ActiveImage, folderName);
+                Project.assets.Add(activeImage);
+                Project.rooms[0].assets.Add(activeImage.id);
+
+            }
         }
+
+        
     }
 }
