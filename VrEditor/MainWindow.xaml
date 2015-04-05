@@ -108,7 +108,7 @@
                     </ListView>
                 </DockPanel>
             </GroupBox>
-            <GroupBox Header="Assets">
+            <GroupBox Header="Assets" AllowDrop="True" Drop="GroupBox_Drop" DragEnter="GroupBox_DragEnter">
                 <DockPanel Height="200">
                     <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                         <Button x:Name="bDeleteAsset" Width="20" Margin="0, 0, 10, 0" Click="bDeleteAsset_Click">-</Button>
@@ -212,6 +212,8 @@
                         <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnLook,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Label Grid.ColumnSpan="2">OnExamine</Label>
                         <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnExamine,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
+                        <Label Grid.ColumnSpan="2">OnUseInventory</Label>
+                        <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnUseInventory,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
                         <Label Grid.ColumnSpan="2">OnTalkTo</Label>
                         <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentHotspot.OnTalkTo,  UpdateSourceTrigger=PropertyChanged}"></TextBox>
                     </av:AutoGrid>

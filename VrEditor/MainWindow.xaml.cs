@@ -514,6 +514,42 @@ namespace VrEditor
             editor.ShowDialog();
         }
 
+        private void GroupBox_DragEnter(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.All;
+        }
+
+        private void GroupBox_Drop(object sender, DragEventArgs e)
+        {
+            IDataObject data = e.Data;
+            string[] files = (string[]) data.GetData("FileNameW");
+
+            foreach (string file in files)
+            {
+                AddAsset(file);
+            }
+            
+
+
+        }
+
+        private void AddAsset(String filename)
+        {
+            // Check if the asset is already there
+            foreach (Asset cur in CurrentGame.Assets)
+            {
+                if (cur.File == filename)
+                {
+                    return;
+                }
+            }
+
+            Asset asset = new Asset();
+            asset.Name = "New Asset";
+            AssetEditor.FromFile(filename, asset);
+            CurrentGame.Assets.Add(asset);
+        }
+
         
 
 

@@ -57,6 +57,12 @@ namespace VrEditor
             set;
         }
 
+        public String OnUseInventory
+        {
+            get;
+            set;
+        }
+
         public String OnTalkTo
         {
             get;

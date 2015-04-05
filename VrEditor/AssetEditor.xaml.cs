@@ -26,7 +26,7 @@ namespace VrEditor
         }
 
 
-        private void InitializeFromFilename(String filename)
+        public static void FromFile(String filename, Asset asset)
         {
             List<String> imageExtensions = new List<string>();
             imageExtensions.Add(".jpg");
@@ -42,29 +42,36 @@ namespace VrEditor
             String extension = System.IO.Path.GetExtension(filename);
             String name = System.IO.Path.GetFileNameWithoutExtension(filename);
 
+            asset.File = filename;
+
             // Fill the name if it is still empty
-            if ((DataContext as Asset).Name == "New Asset")
+            if (asset.Name == "New Asset")
             {
-                (DataContext as Asset).Name = name;
+                asset.Name = name;
             }
-            
+
             // Fill the type if we recognize it
             if (imageExtensions.Contains(extension))
             {
-                (DataContext as Asset).Type = "image";
+                asset.Type = "image";
             }
             else if (musicExtensions.Contains(extension))
             {
-                (DataContext as Asset).Type = "music";
+                asset.Type = "music";
             }
             else if (soundExtensions.Contains(extension))
             {
-                (DataContext as Asset).Type = "sound";
+                asset.Type = "sound";
             }
             else
             {
-                (DataContext as Asset).Type = "blob";
+                asset.Type = "blob";
             }
+        }
+
+        private void InitializeFromFilename(String filename)
+        {
+            FromFile(filename, DataContext as Asset);
         }
 
         private void bChooseFile_Click(object sender, RoutedEventArgs e)
