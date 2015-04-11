@@ -43,12 +43,12 @@ namespace VrEditor
             get
             {
                 CircleShape shape = (CircleShape)_hotspot.Shape;
-                return (float)(shape.Center.X - shape.Radius * 0.5);
+                return (float)(shape.Center.X - shape.Radius);
             }
             set
             {
                 CircleShape shape = (CircleShape)_hotspot.Shape;
-                shape.Center.X = (float) value + shape.Radius * 0.5f;
+                shape.Center.X = (float) value + shape.Radius;
             }
         }
 
@@ -58,12 +58,12 @@ namespace VrEditor
             get
             {
                 CircleShape shape = (CircleShape)_hotspot.Shape;
-                return (float)(shape.Center.Y - shape.Radius * 0.5);
+                return (float)(shape.Center.Y - shape.Radius);
             }
             set
             {
                 CircleShape shape = (CircleShape)_hotspot.Shape;
-                shape.Center.Y = (float)value + shape.Radius * 0.5f;
+                shape.Center.Y = (float)value + shape.Radius;
             }
         }
 

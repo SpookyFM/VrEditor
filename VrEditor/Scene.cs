@@ -22,8 +22,13 @@ namespace VrEditor
             set;
         }
 
-        //public String BackgroundImage
         public ImageFileHolder BackgroundImage
+        {
+            get;
+            set;
+        }
+
+        public ImageFileHolder BackgroundImageRight
         {
             get;
             set;

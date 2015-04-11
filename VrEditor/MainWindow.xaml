@@ -159,6 +159,12 @@
                         <TextBox DockPanel.Dock="Left" Text="{Binding CurrentScene.BackgroundImage}"></TextBox>
                     </DockPanel>
 
+                    <Label Grid.ColumnSpan="2">Background image (right eye):</Label>
+                    <DockPanel Grid.ColumnSpan="2" LastChildFill="True">
+                        <Button DockPanel.Dock="Right" Width="20" Name="bLoadBackgroundRight" Click="bLoadBackgroundRight_Click">...</Button>
+                        <TextBox DockPanel.Dock="Left" Text="{Binding CurrentScene.BackgroundImageRight}"></TextBox>
+                    </DockPanel>
+
                     <Label Grid.ColumnSpan="2">OnEnter</Label>
                     <TextBox AcceptsReturn="True" Grid.ColumnSpan="2" Height="80" FontFamily="Consolas" Text="{Binding CurrentScene.OnEnter, UpdateSourceTrigger=PropertyChanged}"></TextBox>
 

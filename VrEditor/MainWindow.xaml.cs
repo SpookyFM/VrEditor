@@ -550,6 +550,17 @@ namespace VrEditor
             CurrentGame.Assets.Add(asset);
         }
 
+        private void bLoadBackgroundRight_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentScene == null) return;
+            OpenFileDialog dialog = new OpenFileDialog();
+            bool? result = dialog.ShowDialog();
+            if (result.GetValueOrDefault())
+            {
+                CurrentScene.BackgroundImageRight = dialog.FileName;
+            }
+        }
+
         
 
 

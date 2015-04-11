@@ -83,9 +83,20 @@ namespace VrEditor
         {
             foreach (Scene scene in CurrentGame.Scenes)
             {
+                // Left eye
                 json.Asset asset = GenerateImageAsset((string) scene.BackgroundImage, folderName);
                 Project.assets.Add(asset);
                 Project.rooms[0].assets.Add(asset.id);
+
+
+                // Right eye
+                if (File.Exists((string)scene.BackgroundImageRight))
+                {
+                    json.Asset assetRight = GenerateImageAsset((string)scene.BackgroundImageRight, folderName);
+                    Project.assets.Add(assetRight);
+                    Project.rooms[0].assets.Add(assetRight.id);
+                }
+
             }
 
             foreach (InventoryItem item in CurrentGame.InventoryItems)
