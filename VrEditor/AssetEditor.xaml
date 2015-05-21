@@ -25,6 +25,8 @@
                 <ComboBoxItem>image</ComboBoxItem>
             </ComboBox.Items>
         </ComboBox>
+        <Label Grid.Column="0">Own room?</Label>
+        <CheckBox IsChecked="{Binding OwnRoom, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></CheckBox>
         <Button x:Name="bClose" Grid.ColumnSpan="2" Click="bClose_Click">Close</Button>
         
         

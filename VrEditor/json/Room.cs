@@ -16,5 +16,11 @@ namespace VrEditor.json
         public List<string> neighbours = new List<string>();
 
         public List<string> assets = new List<string>();
+
+        public Room()
+        {
+            id = Guid.NewGuid().ToString();
+        }
+
     }
 }

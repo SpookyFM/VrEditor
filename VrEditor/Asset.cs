@@ -28,6 +28,12 @@ namespace VrEditor
             set;
         }
 
+        public bool OwnRoom
+        {
+            get;
+            set;
+        }
+
         public string Name
         {
             get;

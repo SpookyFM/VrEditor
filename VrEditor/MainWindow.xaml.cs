@@ -97,7 +97,8 @@ namespace VrEditor
             using (TextReader reader = new StreamReader(filename))
             {
                 CurrentGame = serializer.Deserialize(reader) as Game;
-                CurrentGame.StartScene = CurrentGame.GetScene(CurrentGame.StartScene.Name);
+                if (CurrentGame.StartScene != null)
+                    CurrentGame.StartScene = CurrentGame.GetScene(CurrentGame.StartScene.Name);
                 ParseScene();
             } 
 

@@ -23,7 +23,7 @@ namespace VrEditor
             Project = new json.Project();
             Project.game = new json.Game();
             Room room = new Room();
-            room.id = Guid.NewGuid().ToString();
+            
 
             Project.rooms.Add(room);
 
@@ -43,7 +43,19 @@ namespace VrEditor
                 asset.type = a.Type;
                 asset.id = Guid.NewGuid().ToString();
                 Project.assets.Add(asset);
-                room.assets.Add(asset.id);
+
+                if (a.OwnRoom)
+                {
+                    // Save the asset with an individual room
+                    Room aRoom = new Room();
+                    aRoom.name = a.Name;
+                    Project.rooms.Add(aRoom);
+                    aRoom.assets.Add(asset.id);
+                }
+                else { 
+                    // The asset goes into the default room
+                    room.assets.Add(asset.id);
+                }
             }
         }
 
@@ -83,10 +95,17 @@ namespace VrEditor
         {
             foreach (Scene scene in CurrentGame.Scenes)
             {
+
+                Room room = new Room();
+
+                String noExtension = System.IO.Path.GetFileNameWithoutExtension(scene.BackgroundImage);
+                room.name = noExtension;
+                Project.rooms.Add(room);
+
                 // Left eye
                 json.Asset asset = GenerateImageAsset((string) scene.BackgroundImage, folderName);
                 Project.assets.Add(asset);
-                Project.rooms[0].assets.Add(asset.id);
+                room.assets.Add(asset.id);
 
 
                 // Right eye
@@ -94,7 +113,7 @@ namespace VrEditor
                 {
                     json.Asset assetRight = GenerateImageAsset((string)scene.BackgroundImageRight, folderName);
                     Project.assets.Add(assetRight);
-                    Project.rooms[0].assets.Add(assetRight.id);
+                    room.assets.Add(assetRight.id);
                 }
 
             }
